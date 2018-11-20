@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import * as PIXI from 'pixi.js'
-import CharacterFactory from './factory/CharacterFactory'
-import GroundFactory from './factory/GroundFactory'
+
+import ExploreScene from './scenes/ExploreScene'
 
 class Game extends Component {
   constructor (props) {
@@ -13,20 +13,6 @@ class Game extends Component {
       height: 600,
       transparent: false
     })
-
-    this.STAGE = {
-      mx: this.app.screen.width / 2,
-      my: this.app.screen.height / 2
-    }
-
-    // Layers
-    const groundContainer = new PIXI.Container()
-    const characterContainer = new PIXI.Container()
-
-    this.containers = { groundContainer, characterContainer }
-
-    this.app.stage.addChild(groundContainer)
-    this.app.stage.addChild(characterContainer)
   }
 
   setup = () => {
@@ -40,80 +26,7 @@ class Game extends Component {
   }
 
   init = async () => {
-    // Ground
-    this.grounds = await GroundFactory.build({
-      x: this.STAGE.mx,
-      y: this.STAGE.my,
-      colSize: 8,
-      maps: [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        1,
-        1,
-        1,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        1,
-        1,
-        1,
-        1,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        1,
-        1,
-        1,
-        1,
-        0,
-        0,
-        0,
-        0
-      ]
-    })
-    this.deploy(this.grounds, this.containers.groundContainer)
-
-    // Characters
-    this.duck = await CharacterFactory.build({
-      src: './duck.svg',
-      x: this.STAGE.mx,
-      y: this.STAGE.my,
-      onClick: this.onClick
-    })
-    this.deploy([this.duck])
-  }
-
-  deploy = (targets, container) => {
-    targets &&
-      targets.forEach(target => {
-        if (!container) this.app.stage.addChild(target)
-        else container.addChild(target)
-      })
+    const scene = new ExploreScene(this.app)
   }
 
   updatePixiCnt = element => {
