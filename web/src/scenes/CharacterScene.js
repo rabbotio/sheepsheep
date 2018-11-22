@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js'
 
 import CharacterFactory from '../factory/CharacterFactory'
 import GroundFactory from '../factory/GroundFactory'
+import ButtonFactory from '../factory/ButtonFactory'
 
 class CharacterScene {
   constructor (app) {
@@ -13,11 +14,13 @@ class CharacterScene {
     // Layers
     const groundContainer = new PIXI.Container()
     const characterContainer = new PIXI.Container()
+    const interactiveContainer = new PIXI.Container()
 
-    this.containers = { groundContainer, characterContainer }
+    this.containers = { groundContainer, characterContainer, interactiveContainer }
 
     app.stage.addChild(groundContainer)
     app.stage.addChild(characterContainer)
+    app.stage.addChild(interactiveContainer)
 
     this.init(app)
   }
@@ -51,9 +54,17 @@ class CharacterScene {
       tint
     })
 
+    // Button
+    this.okButton = await ButtonFactory.build({
+      label: 'OK!',
+      x: this.STAGE.mx,
+      y: this.STAGE.my + 200,
+    })
+
     // Deploy
     this.deploy(app, [this.duck], this.containers.characterContainer)
     this.deploy(app, this.grounds, this.containers.groundContainer)
+    this.deploy(app, [this.okButton], this.containers.interactiveContainer)
   }
 }
 
