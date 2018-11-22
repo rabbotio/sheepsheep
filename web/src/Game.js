@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import * as PIXI from 'pixi.js'
 
-import ExploreScene from './scenes/ExploreScene'
+import CharacterScene from './scenes/CharacterScene'
 
 class Game extends Component {
   constructor (props) {
@@ -26,7 +26,7 @@ class Game extends Component {
   }
 
   init = async () => {
-    const scene = new ExploreScene(this.app)
+    const scene = new CharacterScene(this.app)
   }
 
   updatePixiCnt = element => {

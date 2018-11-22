@@ -1,7 +1,16 @@
 import * as PIXI from 'pixi.js'
 
 class CharacterFactory {
-  static build = ({ src, x = 0, y = 0, width = 64, height = 64, onClick }) =>
+  static build = ({
+    src,
+    x = 0,
+    y = 0,
+    width = 64,
+    height = 64,
+    tint,
+    fg,
+    onClick
+  }) =>
     new Promise((resolve, reject) => {
       // Required
       if (!src) reject(new Error("Required src e.g. { src: './duck.svg'"))
@@ -16,6 +25,16 @@ class CharacterFactory {
         sprite.y = y
         sprite.width = width
         sprite.height = height
+
+        // Tint
+        if (fg) {
+          PIXI.loader.add(fg, fg).load(() => {
+            const fgSprite = new PIXI.Sprite(PIXI.loader.resources[fg].texture)
+            fgSprite.anchor.set(0.5, 1)
+            sprite.addChild(fgSprite)
+          })
+          sprite.tint = tint
+        }
 
         if (onClick && typeof onClick === 'function') {
           // Opt-in to interactivity
