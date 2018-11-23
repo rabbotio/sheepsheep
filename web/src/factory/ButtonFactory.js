@@ -60,6 +60,11 @@ class ButtonFactory {
       sprite.on('pointerdown', onClick)
     }
 
+    // Interactive Effect
+    sprite.on('pointerdown', () => (sprite.position.y = y + 2))
+    sprite.on('pointerup', () => (sprite.position.y = y))
+    sprite.on('pointerupoutside', () => (sprite.position.y = y))
+
     return sprite
   }
 }
