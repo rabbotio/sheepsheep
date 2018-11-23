@@ -16,7 +16,11 @@ class CharacterScene {
     const characterContainer = new PIXI.Container()
     const interactiveContainer = new PIXI.Container()
 
-    this.containers = { groundContainer, characterContainer, interactiveContainer }
+    this.containers = {
+      groundContainer,
+      characterContainer,
+      interactiveContainer
+    }
 
     app.stage.addChild(groundContainer)
     app.stage.addChild(characterContainer)
@@ -31,6 +35,10 @@ class CharacterScene {
         if (!container) app.stage.addChild(target)
         else container.addChild(target)
       })
+  }
+
+  onClick = e => {
+    console.log('onClick:', e.target)
   }
 
   init = async app => {
@@ -59,6 +67,7 @@ class CharacterScene {
       label: 'OK!',
       x: this.STAGE.mx,
       y: this.STAGE.my + 200,
+      onClick: this.onClick
     })
 
     // Deploy

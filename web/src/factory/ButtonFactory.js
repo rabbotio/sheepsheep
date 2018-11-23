@@ -11,7 +11,8 @@ class ButtonFactory {
     width = 128,
     height = 32,
     round = 8,
-    color = 0xffffff
+    color = 0xffffff,
+    onClick
   }) => {
     const graphics = new PIXI.Graphics()
 
@@ -37,8 +38,8 @@ class ButtonFactory {
     const texture = graphics.generateCanvasTexture()
 
     // Sprite
-    const roundedSprite = new PIXI.Sprite(texture)
-    roundedSprite.position.set(x - width * 0.5, y)
+    const sprite = new PIXI.Sprite(texture)
+    sprite.position.set(x - width * 0.5, y)
 
     // Label
     const labelText = new PIXI.Text(label, {
@@ -50,9 +51,16 @@ class ButtonFactory {
       (width - labelText.width) * 0.5,
       (height - labelText.height) * 0.5
     )
-    roundedSprite.addChild(labelText)
+    sprite.addChild(labelText)
 
-    return roundedSprite
+    // Interactive
+    if (onClick && typeof onClick === 'function') {
+      sprite.interactive = true
+      sprite.buttonMode = true
+      sprite.on('pointerdown', onClick)
+    }
+
+    return sprite
   }
 }
 

@@ -20,12 +20,6 @@ class Game extends Component {
     this.init()
   }
 
-  onClick = e => {
-    console.log('onClick:', e.target)
-    e.target.scale.x *= 1.25
-    e.target.scale.y *= 1.25
-  }
-
   init = async () => {
     const scene = new CharacterScene(this.app)
   }
