@@ -4,7 +4,7 @@ class ButtonFactory {
   static build = ({
     label = 'OK',
     labelFont = 'Tahoma',
-    fontSize = 24,
+    fontSize = 18,
     labelColor = 0x000000,
     x = 0,
     y = 0,
@@ -14,6 +14,12 @@ class ButtonFactory {
     color = 0xffffff
   }) => {
     const graphics = new PIXI.Graphics()
+
+    // Shadow
+    const shadowSpan = 4
+    graphics.beginFill(0x000000, 0.25)
+    graphics.drawRoundedRect(shadowSpan, shadowSpan, width, height, round)
+    graphics.endFill()
 
     // 3D Glass effect
     const effectSpan = 1.5

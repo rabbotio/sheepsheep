@@ -11,7 +11,8 @@ class Game extends Component {
     this.app = new PIXI.Application({
       width: 600,
       height: 600,
-      transparent: false
+      transparent: false,
+      backgroundColor: 0xffffff
     })
   }
 
