@@ -22,7 +22,7 @@ class ButtonFactory {
     graphics.endFill()
 
     // 3D Glass effect
-    const effectSpan = 1.5
+    const effectSpan = 1.2
     graphics.beginFill(0x18ffff)
     graphics.drawRoundedRect(-effectSpan, -effectSpan, width, height, round)
     graphics.endFill()
