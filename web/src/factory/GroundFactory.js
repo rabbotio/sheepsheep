@@ -1,3 +1,4 @@
+import * as PIXI from 'pixi.js'
 import BlockFactory from './BlockFactory'
 
 class GroundFactory {
@@ -23,7 +24,44 @@ class GroundFactory {
       grounds.push(sprite)
     })
 
+    // Shadow
+    const index = maps.length
+    const i = index % colSize
+    const j = Math.floor(index / colSize)
+    const r = (64 + 8) / Math.sin(15)
+
+    const shadow = GroundFactory.castShadow({
+      x: x + i * 0.5 - r * 0.5,
+      y: y + j * 0.5 + r * 0.5,
+      width: r,
+      height: r
+    })
+    grounds.unshift(shadow)
+
     return grounds
+  }
+
+  static castShadow = ({ x = 0, y = 0, width = 128, height = 128 }) => {
+    const graphics = new PIXI.Graphics()
+
+    // set a fill and line style
+    graphics.beginFill(0x000000, 0.25)
+
+    // draw a shape
+    const w2 = width * 0.5
+    const h2 = height * 0.5
+    graphics.moveTo(0, 0)
+    graphics.lineTo(w2, -h2 * Math.sin(15))
+    graphics.lineTo(width, 0)
+    graphics.lineTo(w2, h2 * Math.sin(15))
+    graphics.lineTo(0, 0)
+    graphics.endFill()
+
+    const texture = graphics.generateCanvasTexture()
+    const sprite = new PIXI.Sprite(texture)
+    sprite.position.set(x, y)
+
+    return sprite
   }
 }
 
