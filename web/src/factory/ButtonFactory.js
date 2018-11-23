@@ -14,14 +14,27 @@ class ButtonFactory {
     color = 0xffffff
   }) => {
     const graphics = new PIXI.Graphics()
+
+    // 3D Glass effect
+    const effectSpan = 1.5
+    graphics.beginFill(0x18ffff)
+    graphics.drawRoundedRect(-effectSpan, -effectSpan, width, height, round)
+    graphics.endFill()
+
+    graphics.beginFill(0xff4081)
+    graphics.drawRoundedRect(effectSpan, effectSpan, width, height, round)
+    graphics.endFill()
+
     graphics.beginFill(color)
     graphics.drawRoundedRect(0, 0, width, height, round)
     graphics.endFill()
-
     const texture = graphics.generateCanvasTexture()
+
+    // Sprite
     const roundedSprite = new PIXI.Sprite(texture)
     roundedSprite.position.set(x - width * 0.5, y)
 
+    // Label
     const labelText = new PIXI.Text(label, {
       font: `${fontSize}px ${labelFont}`,
       fill: labelColor,
