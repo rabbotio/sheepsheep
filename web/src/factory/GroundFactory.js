@@ -60,6 +60,7 @@ class GroundFactory {
     const texture = graphics.generateCanvasTexture()
     const sprite = new PIXI.Sprite(texture)
     sprite.position.set(x, y)
+    sprite.filters = [new PIXI.filters.BlurFilter(2)]
 
     return sprite
   }
