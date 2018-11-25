@@ -5,10 +5,10 @@ class CharacterFactory {
     src,
     x = 0,
     y = 0,
-    width = 64,
-    height = 64,
+    width = 128,
+    height = 128,
     tint,
-    fg,
+    tintSrc,
     onClick
   }) =>
     new Promise((resolve, reject) => {
@@ -27,13 +27,16 @@ class CharacterFactory {
         sprite.height = height
 
         // Tint
-        if (fg) {
-          PIXI.loader.add(fg, fg).load(() => {
-            const fgSprite = new PIXI.Sprite(PIXI.loader.resources[fg].texture)
-            fgSprite.anchor.set(0.5, 1)
-            sprite.addChild(fgSprite)
+        if (tintSrc) {
+          PIXI.loader.add(tintSrc, tintSrc).load(() => {
+            const tintSprite = new PIXI.Sprite(
+              PIXI.loader.resources[tintSrc].texture
+            )
+            tintSprite.anchor.set(0.5, 1)
+            sprite.addChild(tintSprite)
+            tintSprite.tint = tint
+            tintSprite.name = 'tinted'
           })
-          sprite.tint = tint
         }
 
         if (onClick && typeof onClick === 'function') {

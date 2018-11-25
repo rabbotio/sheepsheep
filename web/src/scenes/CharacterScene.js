@@ -37,10 +37,6 @@ class CharacterScene {
       })
   }
 
-  onClick = e => {
-    console.log('onClick:', e.target)
-  }
-
   init = async app => {
     // Ground
     this.grounds = await GroundFactory.build({
@@ -54,9 +50,9 @@ class CharacterScene {
     const tint = Math.random() * 0xffffff
 
     // Characters
-    this.duck = await CharacterFactory.build({
-      src: './duck.svg',
-      fg: './duck-fg.svg',
+    this.cat = await CharacterFactory.build({
+      src: './cat.svg',
+      tintSrc: './cat-tint-01.svg',
       x: this.STAGE.mx,
       y: this.STAGE.my,
       tint
@@ -67,11 +63,15 @@ class CharacterScene {
       label: 'OK!',
       x: this.STAGE.mx,
       y: this.STAGE.my + 200,
-      onClick: this.onClick
+      onClick: e => {
+        console.log('onClick:', e.target)
+        const tinted = this.cat.getChildByName('tinted')
+        tinted.tint = Math.random() * 0xffffff
+      }
     })
 
     // Deploy
-    this.deploy(app, [this.duck], this.containers.characterContainer)
+    this.deploy(app, [this.cat], this.containers.characterContainer)
     this.deploy(app, this.grounds, this.containers.groundContainer)
     this.deploy(app, [this.okButton], this.containers.interactiveContainer)
   }
