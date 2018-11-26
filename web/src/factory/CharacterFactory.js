@@ -41,7 +41,7 @@ class CharacterFactory {
         }
 
         // Shadow
-        sprite.addChild(ShadowFactory.castOvalShadow(x, y, 32, 32))
+        sprite.addChild(ShadowFactory.castOvalShadow(x, y))
 
         if (onClick && typeof onClick === 'function') {
           // Opt-in to interactivity
