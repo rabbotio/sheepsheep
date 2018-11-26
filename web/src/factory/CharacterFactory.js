@@ -1,12 +1,13 @@
 import * as PIXI from 'pixi.js'
+import ShadowFactory from './ShadowFactory'
 
 class CharacterFactory {
   static build = ({
     src,
     x = 0,
     y = 0,
-    width = 128,
-    height = 128,
+    width = 80,
+    height = 80,
     tint,
     tintSrc,
     onClick
@@ -38,6 +39,9 @@ class CharacterFactory {
             tintSprite.name = 'tinted'
           })
         }
+
+        // Shadow
+        sprite.addChild(ShadowFactory.castOvalShadow(x, y, 32, 32))
 
         if (onClick && typeof onClick === 'function') {
           // Opt-in to interactivity
