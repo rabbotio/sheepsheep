@@ -22,13 +22,13 @@ class ButtonFactory {
     graphics.drawRoundedRect(shadowSpan, shadowSpan, width, height, round)
     graphics.endFill()
 
-    // 3D Glass effect
-    const effectSpan = 1.2
-    graphics.beginFill(0x18ffff)
+    // Anaglyph effect
+    const effectSpan = 1
+    graphics.beginFill(0x00ffff)
     graphics.drawRoundedRect(-effectSpan, -effectSpan, width, height, round)
     graphics.endFill()
 
-    graphics.beginFill(0xff4081)
+    graphics.beginFill(0xff00ff)
     graphics.drawRoundedRect(effectSpan, effectSpan, width, height, round)
     graphics.endFill()
 
