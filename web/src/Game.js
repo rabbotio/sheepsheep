@@ -9,8 +9,8 @@ class Game extends Component {
     this.duck = null
     this.pixi_cnt = null
     this.app = new PIXI.Application({
-      width: 600,
-      height: 600,
+      width: 640,
+      height: 640,
       transparent: false,
       backgroundColor: 0xffffff
     })

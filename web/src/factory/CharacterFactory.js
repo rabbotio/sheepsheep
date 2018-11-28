@@ -18,7 +18,10 @@ class CharacterFactory {
 
       const onLoad = () => {
         // Init
-        const sprite = new PIXI.Sprite(PIXI.loader.resources[src].texture)
+        const texture = PIXI.loader.resources[src].texture
+        texture.baseTexture.resolution = window.devicePixelRatio
+
+        const sprite = new PIXI.Sprite(texture)
 
         // Set the initial position
         sprite.anchor.set(0.5, 1)
@@ -30,13 +33,15 @@ class CharacterFactory {
         // Tint
         if (tintSrc) {
           PIXI.loader.add(tintSrc, tintSrc).load(() => {
-            const tintSprite = new PIXI.Sprite(
-              PIXI.loader.resources[tintSrc].texture
-            )
+            const texture = PIXI.loader.resources[tintSrc].texture
+            texture.baseTexture.resolution = window.devicePixelRatio
+
+            const tintSprite = new PIXI.Sprite(texture)
             tintSprite.anchor.set(0.5, 1)
-            sprite.addChild(tintSprite)
             tintSprite.tint = tint
             tintSprite.name = 'tinted'
+
+            sprite.addChild(tintSprite)
           })
         }
 

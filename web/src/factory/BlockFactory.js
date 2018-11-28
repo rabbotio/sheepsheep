@@ -4,7 +4,9 @@ class BlockFactory {
   static build = ({ src, x = 0, y = 0, width = 128, height = 128 }) => {
     const create = src => {
       // Init
-      const sprite = new PIXI.Sprite(PIXI.loader.resources[src].texture)
+      const texture = PIXI.loader.resources[src].texture
+      texture.baseTexture.resolution = window.devicePixelRatio
+      const sprite = new PIXI.Sprite(texture)
 
       // Set the initial position
       sprite.anchor.set(0.5, 0.25)
