@@ -4,7 +4,7 @@ import * as PIXI from 'pixi.js'
 import CharacterScene from './scenes/CharacterScene'
 
 class Game extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.duck = null
     this.pixi_cnt = null
@@ -21,7 +21,7 @@ class Game extends Component {
   }
 
   init = async () => {
-    const scene = new CharacterScene(this.app)
+    new CharacterScene(this.app)
   }
 
   updatePixiCnt = element => {
@@ -35,7 +35,7 @@ class Game extends Component {
     }
   }
 
-  render () {
+  render() {
     return <div ref={this.updatePixiCnt} />
   }
 }

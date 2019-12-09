@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js'
 
 class ButtonFactory {
   static build = ({
+    renderer,
     label = 'OK',
     labelFont = 'Tahoma',
     fontSize = 18,
@@ -35,7 +36,7 @@ class ButtonFactory {
     graphics.beginFill(color)
     graphics.drawRoundedRect(0, 0, width, height, round)
     graphics.endFill()
-    const texture = graphics.generateCanvasTexture()
+    const texture = renderer.generateTexture(graphics)
 
     // Sprite
     const sprite = new PIXI.Sprite(texture)

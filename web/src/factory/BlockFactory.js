@@ -1,10 +1,11 @@
 import * as PIXI from 'pixi.js'
 
 class BlockFactory {
-  static build = ({ src, x = 0, y = 0, width = 128, height = 128 }) => {
-    const create = src => {
+  static resources = {}
+  static build = ({ loader, src, x = 0, y = 0, width = 128, height = 128 }) => {
+    const create = (resources_src) => {
       // Init
-      const texture = PIXI.loader.resources[src].texture
+      const texture = resources_src.texture
       texture.baseTexture.resolution = window.devicePixelRatio
       const sprite = new PIXI.Sprite(texture)
 
@@ -23,10 +24,10 @@ class BlockFactory {
       if (!src) reject(new Error("Required src e.g. { src: './grass.svg'"))
 
       // Load and create
-      if (!PIXI.loader.resources[src]) {
-        PIXI.loader.add(src, src).load(() => resolve(create(src)))
+      if (!BlockFactory.resources[src]) {
+        loader.add(src, src).load((loader, resources) => resolve(create(BlockFactory.resources[src] = resources[src])))
       } else {
-        resolve(create(src))
+        resolve(create(BlockFactory.resources[src]))
       }
     })
   }

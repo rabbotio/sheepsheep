@@ -33,6 +33,7 @@ class ExploreScene {
   init = async app => {
     // Ground
     this.grounds = await GroundFactory.build({
+      loader: app.loader,
       x: this.STAGE.mx,
       y: this.STAGE.my,
       colSize: 8,

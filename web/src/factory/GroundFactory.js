@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js'
 import BlockFactory from './BlockFactory'
 import ShadowFactory from './ShadowFactory'
 
@@ -10,7 +9,7 @@ class GroundFactory {
     }
   }
 
-  static build = async ({ group, x = 0, y = 0, colSize = 2, maps = [] }) => {
+  static build = async ({ renderer, loader, group, x = 0, y = 0, colSize = 2, maps = [] }) => {
     const srcs = ['./soil.svg', './grass.svg']
     const grounds = []
     await GroundFactory.asyncForEach(maps, async (map, index) => {
@@ -18,6 +17,7 @@ class GroundFactory {
       const j = Math.floor(index / colSize)
 
       const sprite = await BlockFactory.build({
+        loader,
         src: srcs[map],
         x: x + i * (64 - 8) - j * (64 - 8),
         y: y + j * 64 + i * 32 - j * 32
@@ -32,6 +32,7 @@ class GroundFactory {
     const r = (64 + 8) / Math.sin(15)
 
     const shadow = ShadowFactory.castRectShadow({
+      renderer,
       x: x + i * 0.5 - r * 0.5,
       y: y + j * 0.5 + r * 0.5,
       width: r,

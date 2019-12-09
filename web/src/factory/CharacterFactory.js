@@ -2,26 +2,17 @@ import * as PIXI from 'pixi.js'
 import ShadowFactory from './ShadowFactory'
 
 class CharacterFactory {
-  static build = ({
-    src,
-    x = 0,
-    y = 0,
-    width = 80,
-    height = 80,
-    tint,
-    tintSrc,
-    onClick
-  }) =>
+  static build = ({ renderer, loader, src, x = 0, y = 0, width = 80, height = 80, tint, tintSrc, fgSrc, onClick }) =>
     new Promise((resolve, reject) => {
       // Required
       if (!src) reject(new Error("Required src e.g. { src: './duck.svg'"))
 
       const onLoad = () => {
         // Init
-        const texture = PIXI.loader.resources[src].texture
-        texture.baseTexture.resolution = window.devicePixelRatio
+        const _texture = loader.resources[src].texture
+        _texture.baseTexture.resolution = window.devicePixelRatio
 
-        const sprite = new PIXI.Sprite(texture)
+        const sprite = new PIXI.Sprite(_texture)
 
         // Set the initial position
         sprite.anchor.set(0.5, 1)
@@ -32,8 +23,8 @@ class CharacterFactory {
 
         // Tint
         if (tintSrc) {
-          PIXI.loader.add(tintSrc, tintSrc).load(() => {
-            const texture = PIXI.loader.resources[tintSrc].texture
+          loader.add(tintSrc, tintSrc).load((loader, resources) => {
+            const texture = resources[tintSrc].texture
             texture.baseTexture.resolution = window.devicePixelRatio
 
             const tintSprite = new PIXI.Sprite(texture)
@@ -42,11 +33,34 @@ class CharacterFactory {
             tintSprite.name = 'tinted'
 
             sprite.addChild(tintSprite)
+
+            // fg
+            if (fgSrc) {
+              if (!resources[fgSrc].texture) {
+                loader.add(fgSrc, fgSrc).load((loader, resources) => {
+                  const texture = resources[fgSrc].texture
+                  texture.baseTexture.resolution = window.devicePixelRatio
+
+                  const fgSprite = new PIXI.Sprite(texture)
+                  fgSprite.anchor.set(0.5, 1)
+                  fgSprite.name = 'fg'
+
+                  sprite.addChild(fgSprite)
+                })
+              } else {
+                const texture = resources[fgSrc].texture
+                const fgSprite = new PIXI.Sprite(texture)
+                fgSprite.anchor.set(0.5, 1)
+                fgSprite.name = 'fg'
+
+                sprite.addChild(fgSprite)
+              }
+            }
           })
         }
 
         // Shadow
-        sprite.addChild(ShadowFactory.castOvalShadow(x, y))
+        sprite.addChild(ShadowFactory.castOvalShadow({ renderer }))
 
         if (onClick && typeof onClick === 'function') {
           // Opt-in to interactivity
@@ -62,7 +76,7 @@ class CharacterFactory {
         resolve(sprite)
       }
 
-      PIXI.loader.add(src, src).load(onLoad)
+      loader.add(src, src).load(onLoad)
     })
 }
 

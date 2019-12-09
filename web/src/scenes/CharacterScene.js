@@ -40,6 +40,8 @@ class CharacterScene {
   init = async app => {
     // Ground
     this.grounds = await GroundFactory.build({
+      renderer: app.renderer,
+      loader: app.loader,
       x: this.STAGE.mx,
       y: this.STAGE.my,
       colSize: 8,
@@ -51,8 +53,11 @@ class CharacterScene {
 
     // Characters
     this.cat = await CharacterFactory.build({
-      src: './cat.svg',
-      tintSrc: './cat-tint-01.svg',
+      renderer: app.renderer,
+      loader: app.loader,
+      src: './duck-fg.svg',
+      tintSrc: './duck.svg',
+      fgSrc: './duck-fg.svg',
       x: this.STAGE.mx,
       y: this.STAGE.my,
       tint
@@ -60,6 +65,7 @@ class CharacterScene {
 
     // Button
     this.okButton = await ButtonFactory.build({
+      renderer: app.renderer,
       label: 'OK!',
       x: this.STAGE.mx,
       y: this.STAGE.my + 200,
