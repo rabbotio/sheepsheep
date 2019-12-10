@@ -55,7 +55,7 @@ class CharacterScene {
     this.cat = await CharacterFactory.build({
       renderer: app.renderer,
       loader: app.loader,
-      src: [{ url: './duck.svg' }, { url: './duck-tint.svg', tint }, { url: './duck-fg.svg' }],
+      src: [{ url: './duck-bg.svg', tint }, { url: './duck-fg.svg' }],
       x: this.STAGE.mx,
       y: this.STAGE.my
     })
