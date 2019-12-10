@@ -5,7 +5,7 @@ import GroundFactory from '../factory/GroundFactory'
 import ButtonFactory from '../factory/ButtonFactory'
 
 class CharacterScene {
-  constructor (app) {
+  constructor(app) {
     this.STAGE = {
       mx: app.screen.width / 2,
       my: app.screen.height / 2
@@ -55,12 +55,9 @@ class CharacterScene {
     this.cat = await CharacterFactory.build({
       renderer: app.renderer,
       loader: app.loader,
-      src: './duck-fg.svg',
-      tintSrc: './duck.svg',
-      fgSrc: './duck-fg.svg',
+      src: [{ url: './duck.svg' }, { url: './duck-tint.svg', tint }, { url: './duck-fg.svg' }],
       x: this.STAGE.mx,
-      y: this.STAGE.my,
-      tint
+      y: this.STAGE.my
     })
 
     // Button

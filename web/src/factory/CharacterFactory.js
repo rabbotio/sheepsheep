@@ -2,81 +2,56 @@ import * as PIXI from 'pixi.js'
 import ShadowFactory from './ShadowFactory'
 
 class CharacterFactory {
-  static build = ({ renderer, loader, src, x = 0, y = 0, width = 80, height = 80, tint, tintSrc, fgSrc, onClick }) =>
+  static build = ({ renderer, loader, src, x = 0, y = 0, width = 32, height = 32, tint, onClick }) =>
     new Promise((resolve, reject) => {
       // Required
-      if (!src) reject(new Error("Required src e.g. { src: './duck.svg'"))
+      if (!src) reject(new Error("Required src e.g. { src: ['./duck.svg']"))
 
-      const onLoad = () => {
-        // Init
-        const _texture = loader.resources[src].texture
-        _texture.baseTexture.resolution = window.devicePixelRatio
+      const graphics = new PIXI.Graphics()
+      graphics.drawRect(0, 0, width, height)
+      graphics.endFill()
+      const texture = renderer.generateTexture(graphics)
+      texture.baseTexture.resolution = window.devicePixelRatio
+      const sprite = new PIXI.Sprite(texture)
 
-        const sprite = new PIXI.Sprite(_texture)
+      // Shadow
+      sprite.anchor.set(0.5, 1)
+      sprite.x = x
+      sprite.y = y
 
-        // Set the initial position
-        sprite.anchor.set(0.5, 1)
-        sprite.x = x
-        sprite.y = y
-        sprite.width = width
-        sprite.height = height
+      sprite.addChild(ShadowFactory.castOvalShadow({ renderer, width, height }))
 
-        // Tint
-        if (tintSrc) {
-          loader.add(tintSrc, tintSrc).load((loader, resources) => {
-            const texture = resources[tintSrc].texture
-            texture.baseTexture.resolution = window.devicePixelRatio
+      src.map(e => loader.add(e, e))
 
-            const tintSprite = new PIXI.Sprite(texture)
-            tintSprite.anchor.set(0.5, 1)
-            tintSprite.tint = tint
-            tintSprite.name = 'tinted'
+      loader.load((loader, resources) => {
+        src.map(e => {
+          const _texture = resources[e.url].texture
+          _texture.baseTexture.resolution = window.devicePixelRatio
+          const _sprite = new PIXI.Sprite(_texture)
+          _sprite.anchor.set(0.5, 1)
 
-            sprite.addChild(tintSprite)
+          if (e.tint) {
+            _sprite.tint = e.tint
+            _sprite.name = 'tinted'
+          }
 
-            // fg
-            if (fgSrc) {
-              if (!resources[fgSrc].texture) {
-                loader.add(fgSrc, fgSrc).load((loader, resources) => {
-                  const texture = resources[fgSrc].texture
-                  texture.baseTexture.resolution = window.devicePixelRatio
+          return sprite.addChild(_sprite)
+        })
+      })
 
-                  const fgSprite = new PIXI.Sprite(texture)
-                  fgSprite.anchor.set(0.5, 1)
-                  fgSprite.name = 'fg'
+      // Event
+      if (onClick && typeof onClick === 'function') {
+        // Opt-in to interactivity
+        sprite.interactive = true
 
-                  sprite.addChild(fgSprite)
-                })
-              } else {
-                const texture = resources[fgSrc].texture
-                const fgSprite = new PIXI.Sprite(texture)
-                fgSprite.anchor.set(0.5, 1)
-                fgSprite.name = 'fg'
+        // Shows hand cursor
+        sprite.buttonMode = true
 
-                sprite.addChild(fgSprite)
-              }
-            }
-          })
-        }
-
-        // Shadow
-        sprite.addChild(ShadowFactory.castOvalShadow({ renderer }))
-
-        if (onClick && typeof onClick === 'function') {
-          // Opt-in to interactivity
-          sprite.interactive = true
-
-          // Shows hand cursor
-          sprite.buttonMode = true
-
-          // Pointers normalize touch and mouse
-          sprite.on('pointerdown', onClick)
-        }
-
-        resolve(sprite)
+        // Pointers normalize touch and mouse
+        sprite.on('pointerdown', onClick)
       }
 
-      loader.add(src, src).load(onLoad)
+      resolve(sprite)
     })
 }
 
