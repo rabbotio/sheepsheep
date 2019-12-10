@@ -24,7 +24,7 @@ class ShadowFactory {
 
   static castOvalShadow = ({ renderer, x = 0, y = 0, width = 32, height = 32 }) => {
     const graphics = new PIXI.Graphics()
-    const h1 = height * Math.sin(15)
+    const h1 = height * 0.5
 
     graphics.beginFill(0x000000, 0.25)
     graphics.drawEllipse(0, 0, width, h1)
