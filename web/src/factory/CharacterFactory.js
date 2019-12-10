@@ -8,7 +8,9 @@ class CharacterFactory {
       if (!src) reject(new Error("Required src e.g. { src: ['./duck.svg']"))
 
       // Array
-      if (typeof src === 'string') src = [src]
+      if (typeof src === 'string') {
+        src = [{ url: src }]
+      }
 
       // Base sprite
       const sprite = PIXIHelper.buildEmptySprite({ renderer, x, y, width, height })

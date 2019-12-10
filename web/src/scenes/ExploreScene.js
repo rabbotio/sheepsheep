@@ -4,7 +4,7 @@ import CharacterFactory from '../factory/CharacterFactory'
 import GroundFactory from '../factory/GroundFactory'
 
 class ExploreScene {
-  constructor (app) {
+  constructor(app) {
     this.STAGE = {
       mx: app.screen.width / 2,
       my: app.screen.height / 2
@@ -33,6 +33,7 @@ class ExploreScene {
   init = async app => {
     // Ground
     this.grounds = await GroundFactory.build({
+      renderer: app.renderer,
       loader: app.loader,
       x: this.STAGE.mx,
       y: this.STAGE.my,
@@ -91,7 +92,9 @@ class ExploreScene {
 
     // Characters
     this.duck = await CharacterFactory.build({
-      src: './duck.svg',
+      renderer: app.renderer,
+      loader: app.loader,
+      src: [{ url: './duck-bg.svg', tint: 0xff0000 }, { url: './duck-fg.svg' }],
       x: this.STAGE.mx,
       y: this.STAGE.my,
       onClick: this.onClick
