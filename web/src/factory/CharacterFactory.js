@@ -1,5 +1,5 @@
-import * as PIXI from 'pixi.js'
 import ShadowFactory from './ShadowFactory'
+import PIXIHelper from '../lib/PIXIHelper'
 
 class CharacterFactory {
   static build = ({ renderer, loader, src, x = 0, y = 0, width = 32, height = 32, tint, onClick }) =>
@@ -7,37 +7,29 @@ class CharacterFactory {
       // Required
       if (!src) reject(new Error("Required src e.g. { src: ['./duck.svg']"))
 
-      const graphics = new PIXI.Graphics()
-      graphics.drawRect(0, 0, width, height)
-      graphics.endFill()
-      const texture = renderer.generateTexture(graphics)
-      texture.baseTexture.resolution = window.devicePixelRatio
-      const sprite = new PIXI.Sprite(texture)
+      // Array
+      if (typeof src === 'string') src = [src]
+
+      // Base sprite
+      const sprite = PIXIHelper.buildEmptySprite({ renderer, x, y, width, height })
 
       // Shadow
-      sprite.anchor.set(0.5, 1)
-      sprite.x = x
-      sprite.y = y
-
       sprite.addChild(ShadowFactory.castOvalShadow({ renderer, width, height }))
 
+      // Elements
       src.map(e => loader.add(e, e))
-
-      loader.load((loader, resources) => {
+      loader.load((loader, resources) =>
         src.map(e => {
-          const _texture = resources[e.url].texture
-          _texture.baseTexture.resolution = window.devicePixelRatio
-          const _sprite = new PIXI.Sprite(_texture)
-          _sprite.anchor.set(0.5, 1)
-
-          if (e.tint) {
-            _sprite.tint = e.tint
-            _sprite.name = 'tinted'
-          }
-
-          return sprite.addChild(_sprite)
+          return sprite.addChild(
+            PIXIHelper.buildStaticSprite({
+              tint: e.tint,
+              texture: resources[e.url].texture,
+              width,
+              height
+            })
+          )
         })
-      })
+      )
 
       // Event
       if (onClick && typeof onClick === 'function') {

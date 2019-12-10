@@ -24,15 +24,17 @@ class ShadowFactory {
 
   static castOvalShadow = ({ renderer, x = 0, y = 0, width = 32, height = 32 }) => {
     const graphics = new PIXI.Graphics()
-    const h1 = height * 0.5
+    const factor = 0.25
+    const w2 = width * factor
+    const h22 = height * factor * 0.5
 
     graphics.beginFill(0x000000, 0.25)
-    graphics.drawEllipse(0, 0, width, h1)
+    graphics.drawEllipse(0, 0, w2, h22)
     graphics.endFill()
 
     const texture = renderer.generateTexture(graphics)
     const sprite = new PIXI.Sprite(texture)
-    sprite.position.set(x - width, y - h1)
+    sprite.position.set(x - w2, y - h22)
     sprite.filters = [new PIXI.filters.BlurFilter(2)]
 
     return sprite
